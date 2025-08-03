@@ -16,8 +16,10 @@ This n8n community node lets you easily screenshot X (Twitter) posts in your wor
 
 Before using the node, you need to set up TwitterShots API credentials:
 
-1. Visit [TwitterShots](https://twittershots.com/account/settings) to get your API key
+1. Visit [TwitterShots account](https://twittershots.com/account/settings) to get your API key
 2. Add your API key to n8n credentials
+
+For detailed information about API credentials and parameters, please refer to the [API Documentation](https://twittershots.com/docs/api).
 
 ## Usage
 
