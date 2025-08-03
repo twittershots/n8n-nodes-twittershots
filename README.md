@@ -64,8 +64,7 @@ npm link
 
 ```
 # In the nodes directory within your n8n installation
-# node-package-name is the name from the package.json
-npm link <node-package-name>
+npm link n8n-nodes-twittershots
 ```
 
 4.Start n8n:
