@@ -1,14 +1,37 @@
-![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
+![n8n TwitterShots node image](./n8n-TwitterShots-node.png)
 
-# n8n-nodes-starter
+# n8n-nodes-twittershots
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](https://n8n.io). It includes the node linter and other dependencies.
+This n8n community node lets you easily screenshot X (formerly Twitter) posts in your workflows with TwitterShots API.
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+## Features
 
-If you would like your node to be available on n8n cloud you can also [submit your node for verification](https://docs.n8n.io/integrations/creating-nodes/deploy/submit-community-nodes/).
+- Multiple output formats (SVG, PNG, HTML)
+- Light/Dark theme support
+- Customizable logo options (X, Bluebird, or none)
+- Configurable display options (full text, timestamp, view count, statistics)
+- Simple API integration
 
-## Prerequisites
+## Authentication
+
+Before using the node, you need to set up TwitterShots API credentials:
+
+1. Visit [TwitterShots](https://twittershots.com/account/settings) to get your API key
+2. Add your API key to n8n credentials
+
+## Usage
+
+1. Search TwitterShots and add TwitterShots node to your workflow
+2. Select "Tweet Screenshot" resource
+3. Select "Get a tweet screenshot" action
+4. Create TwitterShots API credentials
+5. Select Tweet Screenshot Resource
+6. Enter the tweet ID and configure output format and display options
+7. Run the workflow to get your screenshot
+
+## Dev and test node local
+
+### Prerequisites
 
 You need the following installed on your development machine:
 
@@ -20,29 +43,47 @@ You need the following installed on your development machine:
   ```
 * Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
 
-## Using this starter
+1.Clone your new repo
 
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
+  ```
+  git clone https://github.com/0xinhua/n8n-nodes-twittershots
+  ```
 
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-   ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `npm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `npm run lint` to check for errors or `npm run lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+2.When you are ready to test your node, publish it locally
 
-## More information
+```
+# In your n8n-nodes-twittershots directory
+npm i
+npm run build
+npm link
+```
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+3. Install the node into your local n8n instance:
+
+```
+# In the nodes directory within your n8n installation
+# node-package-name is the name from the package.json
+npm link <node-package-name>
+```
+
+4.Start n8n:
+
+```
+n8n start
+```
+
+5.Open n8n in your browser. You should see TwitterShots nodes when you search for them in the nodes panel.
+
+Checkout full docs [test your n8n node](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/#test-your-node).
+
+### Issues
+
+If you need help or have any questions:
+
+- Check the [API Documentation](https://twittershots.com/docs/api)
+- Email us at support@twittershots.com
+- Create an issue on [GitHub Issues](https://github.com/0xinhua/n8n-nodes-twittershots/issues)
 
 ## License
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+[MIT](LICENSE.md)

@@ -1,19 +1,24 @@
 {
-  "name": "n8n-nodes-<...>",
+  "name": "n8n-nodes-twittershots",
   "version": "0.1.0",
-  "description": "",
+  "description": "n8n node to generate Twitter/X screenshots using TwitterShots API",
   "keywords": [
+    "twitter screenshot",
+    "X post screenshot",
+    "screenshot",
+    "tweet screenshot",
+    "social media",
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/0xinhua/n8n-nodes-twittershots",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "0xinhua",
+    "email": "support@twittershots.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+    "url": "git+https://github.com/0xinhua/n8n-nodes-twittershots.git"
   },
   "engines": {
     "node": ">=20.15"
@@ -33,12 +38,10 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
+      "dist/credentials/TwitterShotsApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
+      "dist/nodes/TwitterShots/TwitterShots.node.js"
     ]
   },
   "devDependencies": {

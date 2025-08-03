@@ -1,0 +1,24 @@
+{
+	"node": "n8n-nodes-twittershots.TwitterShots",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": [
+		"Twitter/X",
+		"Twitter Screenshots",
+    "Screenshots",
+		"Efficiency",
+		"Media"
+	],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://twittershots.com/docs/api#authentication"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://twittershots.com/docs/api"
+			}
+		]
+	}
+}
