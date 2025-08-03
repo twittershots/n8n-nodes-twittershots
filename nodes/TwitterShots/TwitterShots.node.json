@@ -1,14 +1,8 @@
 {
-	"node": "n8n-nodes-twittershots.TwitterShots",
+	"node": "n8n-nodes-twittershots.twitterShots",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
-	"categories": [
-		"Twitter/X",
-		"Twitter Screenshots",
-    "Screenshots",
-		"Efficiency",
-		"Media"
-	],
+	"categories": ["Twitter/X", "Twitter Screenshots", "Screenshots", "Efficiency", "Media"],
 	"resources": {
 		"credentialDocumentation": [
 			{

@@ -1,10 +1,9 @@
-
 import { INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
 
 export class TwitterShots implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'TwitterShots',
-		name: 'TwitterShots',
+		name: 'twitterShots',
 		icon: 'file:TwitterShotsLogo.svg',
 		group: ['transform'],
 		version: 1,
@@ -27,7 +26,7 @@ export class TwitterShots implements INodeType {
 		],
 		credentials: [
 			{
-				name: 'TwitterShotsApi',
+				name: 'twitterShotsApi',
 				required: true,
 			},
 		],
@@ -51,7 +50,6 @@ export class TwitterShots implements INodeType {
 					},
 				],
 				default: 'tweetScreenshot',
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
@@ -60,9 +58,7 @@ export class TwitterShots implements INodeType {
 				noDataExpression: true,
 				displayOptions: {
 					show: {
-						resource: [
-							'tweetScreenshot',
-						],
+						resource: ['tweetScreenshot'],
 					},
 				},
 				options: [
@@ -90,12 +86,8 @@ export class TwitterShots implements INodeType {
 				description: 'The ID of the tweet to screenshot',
 				displayOptions: {
 					show: {
-						resource: [
-							'tweetScreenshot',
-						],
-						operation: [
-							'get',
-						],
+						resource: ['tweetScreenshot'],
+						operation: ['get'],
 					},
 				},
 			},
@@ -104,7 +96,7 @@ export class TwitterShots implements INodeType {
 				name: 'format',
 				type: 'options',
 				default: 'svg',
-        description: 'The format of the screenshot, svg(default) or png or html',
+				description: 'The format of the screenshot, svg(default) or png or html',
 				options: [
 					{
 						name: 'SVG',
@@ -128,12 +120,8 @@ export class TwitterShots implements INodeType {
 				},
 				displayOptions: {
 					show: {
-						resource: [
-							'tweetScreenshot',
-						],
-						operation: [
-							'get',
-						],
+						resource: ['tweetScreenshot'],
+						operation: ['get'],
 					},
 				},
 			},
@@ -162,12 +150,8 @@ export class TwitterShots implements INodeType {
 				},
 				displayOptions: {
 					show: {
-						resource: [
-							'tweetScreenshot',
-						],
-						operation: [
-							'get',
-						],
+						resource: ['tweetScreenshot'],
+						operation: ['get'],
 					},
 				},
 			},
@@ -200,12 +184,8 @@ export class TwitterShots implements INodeType {
 				},
 				displayOptions: {
 					show: {
-						resource: [
-							'tweetScreenshot',
-						],
-						operation: [
-							'get',
-						],
+						resource: ['tweetScreenshot'],
+						operation: ['get'],
 					},
 				},
 			},
@@ -218,19 +198,15 @@ export class TwitterShots implements INodeType {
 				description: 'Additional fields to include in the screenshot',
 				displayOptions: {
 					show: {
-						resource: [
-							'tweetScreenshot',
-						],
-						operation: [
-							'get',
-						],
+						resource: ['tweetScreenshot'],
+						operation: ['get'],
 					},
 				},
 				options: [
 					{
 						displayName: 'Show Full Text',
 						name: 'showFullText',
-						description: 'Show the full text of the tweet, default is true',
+						description: 'Whether to show the full text of the tweet',
 						type: 'boolean',
 						default: true,
 						routing: {
@@ -244,7 +220,7 @@ export class TwitterShots implements INodeType {
 					{
 						displayName: 'Show Timestamp',
 						name: 'showTimestamp',
-						description: 'Show the timestamp of the tweet, default is true',
+						description: 'Whether to show the timestamp of the tweet',
 						type: 'boolean',
 						default: true,
 						routing: {
@@ -258,7 +234,7 @@ export class TwitterShots implements INodeType {
 					{
 						displayName: 'Show Views',
 						name: 'showViews',
-						description: 'Show the views of the tweet, default is true',
+						description: 'Whether to show the views count of the tweet',
 						type: 'boolean',
 						default: true,
 						routing: {
@@ -273,7 +249,7 @@ export class TwitterShots implements INodeType {
 						displayName: 'Show Stats',
 						name: 'showStats',
 						type: 'boolean',
-						description: 'Show the stats of the tweet, default is true',
+						description: 'Whether to show the statistics of the tweet',
 						default: true,
 						routing: {
 							request: {

@@ -1,11 +1,7 @@
-import {
-	IAuthenticateGeneric,
-	ICredentialType,
-	INodeProperties,
-} from 'n8n-workflow';
+import { IAuthenticateGeneric, ICredentialType, INodeProperties } from 'n8n-workflow';
 
 export class TwitterShotsApi implements ICredentialType {
-	name = 'TwitterShotsApi';
+	name = 'twitterShotsApi';
 	displayName = 'TwitterShots API';
 	documentationUrl = 'https://twittershots.com/docs/api';
 	properties: INodeProperties[] = [
@@ -21,12 +17,12 @@ export class TwitterShotsApi implements ICredentialType {
 			description: 'Your TwitterShots API key from Account Settings',
 		},
 	];
-	authenticate = {
+	authenticate: IAuthenticateGeneric = {
 		type: 'generic',
 		properties: {
 			headers: {
 				'X-API-KEY': '={{$credentials.apiKey}}',
 			},
 		},
-	} as IAuthenticateGeneric;
+	};
 }
