@@ -2,7 +2,7 @@
 
 # n8n-nodes-twittershots
 
-This n8n community node lets you easily screenshot X (formerly Twitter) posts in your workflows with TwitterShots API.
+This n8n community node lets you easily screenshot X (Twitter) posts in your workflows with TwitterShots API.
 
 ## Features
 
