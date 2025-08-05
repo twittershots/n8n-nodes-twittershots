@@ -2,13 +2,16 @@
 
 # n8n-nodes-twittershots
 
-This n8n community node lets you easily screenshot X (Twitter) posts in your workflows with TwitterShots API.
+A n8n node lets you easily screenshot X (Twitter) posts in your workflows with TwitterShots API.
+
+- [TwitterShots](https://twittershots.com/) is professional X/Tweet screenshot generator.
+- [n8n](https://n8n.io/) is a fair-code licensed workflow automation platform.
 
 ## Features
 
 - Multiple output formats (SVG, PNG, HTML)
 - Light/Dark theme support
-- Customizable logo options (X, Bluebird, or none)
+- Customizable logo options (X, bluebird, or none)
 - Configurable display options (full text, timestamp, view count, statistics)
 - Simple API integration
 
@@ -75,7 +78,7 @@ n8n start
 
 5.Open n8n in your browser. You should see TwitterShots nodes when you search for them in the nodes panel.
 
-Checkout full docs [test your n8n node](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/#test-your-node).
+Checkout full docs [test n8n node](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/#test-your-node).
 
 ### Issues
 
