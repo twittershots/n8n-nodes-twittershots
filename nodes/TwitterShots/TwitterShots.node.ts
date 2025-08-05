@@ -1,4 +1,4 @@
-import { INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
 
 export class TwitterShots implements INodeType {
 	description: INodeTypeDescription = {
@@ -83,6 +83,7 @@ export class TwitterShots implements INodeType {
 				type: 'string',
 				required: true,
 				default: '',
+        placeholder: 'The ID of the tweet to screenshot',
 				description: 'The ID of the tweet to screenshot',
 				displayOptions: {
 					show: {
@@ -263,4 +264,65 @@ export class TwitterShots implements INodeType {
 			},
 		],
 	};
+
+  // add excute for binary data
+  async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+    const items = this.getInputData();
+    const returnData: INodeExecutionData[] = [];
+
+    // Get credentials
+    const credentials = await this.getCredentials('twitterShotsApi');
+
+    for (let i = 0; i < items.length; i++) {
+      const statusId = this.getNodeParameter('statusId', i) as string;
+      const format = this.getNodeParameter('format', i) as string;
+      const theme = this.getNodeParameter('theme', i) as string;
+      const logo = this.getNodeParameter('logo', i) as string;
+      const additionalFields = this.getNodeParameter('additionalFields', i) as {
+        showFullText?: boolean;
+        showTimestamp?: boolean;
+        showViews?: boolean;
+        showStats?: boolean;
+      };
+
+      // Build query parameters
+      const queryParams = {
+        format,
+        theme,
+        logo,
+        ...additionalFields,
+      };
+
+      // Make API request using n8n helper
+      const response = await this.helpers.request({
+        method: 'GET',
+        url: 'https://api.twittershots.com/api/v1/screenshot/' + statusId,
+        qs: queryParams,
+        encoding: null, // Important: return Buffer for binary data
+        headers: {
+          Accept: format === 'svg' ? 'image/svg+xml' : format === 'png' ? 'image/png' : 'text/html',
+          'X-API-KEY': credentials.apiKey as string,
+        },
+      });
+
+      if (format === 'png' || format === 'svg') {
+        // Handle binary data response
+        returnData.push({
+          json: {},
+          binary: {
+            data: await this.helpers.prepareBinaryData(response, `tweet.${format}`),
+          },
+        });
+      } else {
+        // Handle HTML format response
+        returnData.push({
+          json: {
+            html: response.toString(),
+          },
+        });
+      }
+    }
+
+    return this.prepareOutputData(returnData);
+  }
 }
