@@ -34,15 +34,11 @@ export class TwitterShotsApi implements ICredentialType {
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://api.twittershots.com',
-			url: '/api/v1/screenshot/1617979122625712128',
+			url: '/api/v1/usage',
 			method: 'GET',
 			headers: {
-				Accept: 'image/svg+xml,image/png,text/html',
+				Accept: 'application/json',
 				'X-API-KEY': '={{$credentials.apiKey}}',
-			},
-			qs: {
-				format: 'svg',
-				theme: 'light',
 			},
 		},
 	};

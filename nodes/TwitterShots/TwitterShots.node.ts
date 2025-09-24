@@ -1,4 +1,13 @@
-import { IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
+import {
+	IExecuteFunctions,
+	INodeExecutionData,
+	INodeType,
+	INodeTypeDescription,
+	NodeConnectionType,
+	IHttpRequestOptions,
+	NodeApiError,
+} from 'n8n-workflow';
+import { Buffer } from 'buffer';
 
 export class TwitterShots implements INodeType {
 	description: INodeTypeDescription = {
@@ -30,12 +39,9 @@ export class TwitterShots implements INodeType {
 				required: true,
 			},
 		],
+		// requestDefaults can be kept to set the base URL for all requests
 		requestDefaults: {
 			baseURL: 'https://api.twittershots.com',
-			headers: {
-				Accept: 'image/svg+xml,image/png,text/html',
-				'Content-Type': 'image/svg+xml,image/png,text/html',
-			},
 		},
 		properties: [
 			{
@@ -67,12 +73,7 @@ export class TwitterShots implements INodeType {
 						value: 'get',
 						action: 'Get a tweet screenshot',
 						description: 'Get a screenshot of a tweet',
-						routing: {
-							request: {
-								method: 'GET',
-								url: '=/api/v1/screenshot/{{$parameter["statusId"]}}',
-							},
-						},
+						// ✨ 2. Remove the routing property here for a pure programmatic style
 					},
 				],
 				default: 'get',
@@ -83,7 +84,7 @@ export class TwitterShots implements INodeType {
 				type: 'string',
 				required: true,
 				default: '',
-        placeholder: 'The ID of the tweet to screenshot',
+				placeholder: 'The ID of the tweet to screenshot',
 				description: 'The ID of the tweet to screenshot',
 				displayOptions: {
 					show: {
@@ -112,13 +113,7 @@ export class TwitterShots implements INodeType {
 						value: 'html',
 					},
 				],
-				routing: {
-					request: {
-						qs: {
-							format: '={{$value}}',
-						},
-					},
-				},
+				// ✨ 2. Remove the routing property here
 				displayOptions: {
 					show: {
 						resource: ['tweetScreenshot'],
@@ -142,13 +137,7 @@ export class TwitterShots implements INodeType {
 						value: 'dark',
 					},
 				],
-				routing: {
-					request: {
-						qs: {
-							theme: '={{$value}}',
-						},
-					},
-				},
+				// ✨ 2. Remove the routing property here
 				displayOptions: {
 					show: {
 						resource: ['tweetScreenshot'],
@@ -176,13 +165,7 @@ export class TwitterShots implements INodeType {
 						value: 'none',
 					},
 				],
-				routing: {
-					request: {
-						qs: {
-							logo: '={{$value}}',
-						},
-					},
-				},
+				// ✨ 2. Remove the routing property here
 				displayOptions: {
 					show: {
 						resource: ['tweetScreenshot'],
@@ -210,13 +193,7 @@ export class TwitterShots implements INodeType {
 						description: 'Whether to show the full text of the tweet',
 						type: 'boolean',
 						default: true,
-						routing: {
-							request: {
-								qs: {
-									showFullText: '={{$value}}',
-								},
-							},
-						},
+						// ✨ 2. Remove the routing property here
 					},
 					{
 						displayName: 'Show Timestamp',
@@ -224,13 +201,7 @@ export class TwitterShots implements INodeType {
 						description: 'Whether to show the timestamp of the tweet',
 						type: 'boolean',
 						default: true,
-						routing: {
-							request: {
-								qs: {
-									showTimestamp: '={{$value}}',
-								},
-							},
-						},
+						// ✨ 2. Remove the routing property here
 					},
 					{
 						displayName: 'Show Views',
@@ -238,13 +209,7 @@ export class TwitterShots implements INodeType {
 						description: 'Whether to show the views count of the tweet',
 						type: 'boolean',
 						default: true,
-						routing: {
-							request: {
-								qs: {
-									showViews: '={{$value}}',
-								},
-							},
-						},
+						// ✨ 2. Remove the routing property here
 					},
 					{
 						displayName: 'Show Stats',
@@ -252,77 +217,108 @@ export class TwitterShots implements INodeType {
 						type: 'boolean',
 						description: 'Whether to show the statistics of the tweet',
 						default: true,
-						routing: {
-							request: {
-								qs: {
-									showStats: '={{$value}}',
-								},
-							},
-						},
+						// ✨ 2. Remove the routing property here
 					},
 				],
 			},
 		],
 	};
 
-  // add excute for binary data
-  async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-    const items = this.getInputData();
-    const returnData: INodeExecutionData[] = [];
+	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+		const items = this.getInputData();
+		const returnData: INodeExecutionData[] = [];
 
-    // Get credentials
-    const credentials = await this.getCredentials('twitterShotsApi');
+		for (let i = 0; i < items.length; i++) {
+			// ✨ 3. Wrap all logic in a try...catch block for proper error handling
+			try {
+				const statusId = this.getNodeParameter('statusId', i) as string;
+				const format = this.getNodeParameter('format', i) as string;
+				const theme = this.getNodeParameter('theme', i) as string;
+				const logo = this.getNodeParameter('logo', i) as string;
+				const additionalFields = this.getNodeParameter('additionalFields', i, {}) as {
+					showFullText?: boolean;
+					showTimestamp?: boolean;
+					showViews?: boolean;
+					showStats?: boolean;
+				};
 
-    for (let i = 0; i < items.length; i++) {
-      const statusId = this.getNodeParameter('statusId', i) as string;
-      const format = this.getNodeParameter('format', i) as string;
-      const theme = this.getNodeParameter('theme', i) as string;
-      const logo = this.getNodeParameter('logo', i) as string;
-      const additionalFields = this.getNodeParameter('additionalFields', i) as {
-        showFullText?: boolean;
-        showTimestamp?: boolean;
-        showViews?: boolean;
-        showStats?: boolean;
-      };
+				const queryParams = {
+					format,
+					theme,
+					logo,
+					...additionalFields,
+				};
 
-      // Build query parameters
-      const queryParams = {
-        format,
-        theme,
-        logo,
-        ...additionalFields,
-      };
+				// ✨ 4. Build an options object conforming to IHttpRequestOptions
+				const options: IHttpRequestOptions = {
+					method: 'GET',
+					// The baseURL is defined in requestDefaults, so we use a relative path here
+					url: `https://api.twittershots.com/api/v1/screenshot/${statusId}`,
+					qs: queryParams,
+					headers: {
+						Accept:
+							format === 'svg' ? 'image/svg+xml' : format === 'png' ? 'image/png' : format === 'jpeg' ? 'image/jpeg' : 'text/html',
+					},
+					// For binary files, setting encoding to 'arraybuffer' is important
+					encoding: (format === 'html') ? 'text' : 'arraybuffer',
+					// We need the full response to access the binary data from the body
+					returnFullResponse: true,
+				};
 
-      // Make API request using n8n helper
-      const response = await this.helpers.request({
-        method: 'GET',
-        url: 'https://api.twittershots.com/api/v1/screenshot/' + statusId,
-        qs: queryParams,
-        encoding: null, // Important: return Buffer for binary data
-        headers: {
-          Accept: format === 'svg' ? 'image/svg+xml' : format === 'png' ? 'image/png' : 'text/html',
-          'X-API-KEY': credentials.apiKey as string,
-        },
-      });
+				// ✨ 5. Use httpRequestWithAuthentication to automatically handle authentication
+				const response = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'twitterShotsApi',
+					options,
+				);
 
-      if (format === 'png' || format === 'svg') {
-        // Handle binary data response
-        returnData.push({
-          json: {},
-          binary: {
-            data: await this.helpers.prepareBinaryData(response, `tweet.${format}`),
-          },
-        });
-      } else {
-        // Handle HTML format response
-        returnData.push({
-          json: {
-            html: response.toString(),
-          },
-        });
-      }
-    }
+				let executionData: INodeExecutionData;
 
-    return this.prepareOutputData(returnData);
-  }
+				if (format === 'html') {
+          executionData = {
+						json: {
+							html: response.body,
+						},
+						pairedItem: {
+							item: i,
+						},
+					};
+				} else {
+					// ✨ 6. FIX: Build the return data with the correct top-level structure
+					executionData = {
+						json: {},
+						binary: {
+							data: await this.helpers.prepareBinaryData(
+								Buffer.from(response.body as string, 'binary'),
+								`tweet.${format}`,
+							),
+						},
+						pairedItem: {
+							item: i,
+						},
+					};
+				}
+				returnData.push(executionData);
+			} catch (error) {
+				// ✨ 3. Implement proper error handling
+				if (this.continueOnFail()) {
+					// If the user configured the node to continue on error, return the error message
+					const errorData: INodeExecutionData = {
+						json: {
+							error: error.message,
+						},
+						pairedItem: {
+							item: i,
+						},
+					};
+					returnData.push(errorData);
+					continue;
+				}
+				// Otherwise, throw a standardized n8n error
+				throw new NodeApiError(this.getNode(), error, { itemIndex: i });
+			}
+		}
+
+		return this.prepareOutputData(returnData);
+	}
 }

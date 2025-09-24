@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-twittershots",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "n8n node to generate Twitter/X screenshots using TwitterShots API",
   "keywords": [
     "twitter screenshot",
