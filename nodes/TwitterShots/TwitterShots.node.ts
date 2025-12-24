@@ -145,36 +145,59 @@ export class TwitterShots implements INodeType {
 					},
 				},
 			},
-			{
-				displayName: 'Logo',
-				name: 'logo',
-				type: 'options',
-				default: 'x',
-				description: 'The logo of the screenshot, x(default) or bluebird or none',
-				options: [
-					{
-						name: 'X (Twitter)',
-						value: 'x',
-					},
-					{
-						name: 'Bluebird',
-						value: 'bluebird',
-					},
-					{
-						name: 'None',
-						value: 'none',
-					},
-				],
-				// ✨ 2. Remove the routing property here
-				displayOptions: {
-					show: {
-						resource: ['tweetScreenshot'],
-						operation: ['get'],
-					},
+		{
+			displayName: 'Logo',
+			name: 'logo',
+			type: 'options',
+			default: 'x',
+			description: 'The logo of the screenshot, x(default) or bluebird or none',
+			options: [
+				{
+					name: 'X (Twitter)',
+					value: 'x',
+				},
+				{
+					name: 'Bluebird',
+					value: 'bluebird',
+				},
+				{
+					name: 'None',
+					value: 'none',
+				},
+			],
+			// ✨ 2. Remove the routing property here
+			displayOptions: {
+				show: {
+					resource: ['tweetScreenshot'],
+					operation: ['get'],
 				},
 			},
-			{
-				displayName: 'Additional Fields',
+		},
+		{
+			displayName: 'Return Type',
+			name: 'returnType',
+			type: 'options',
+			default: 'buffer',
+			description: 'Specifies the return type of the response',
+			options: [
+				{
+					name: 'Buffer (Image File)',
+					value: 'buffer',
+				},
+				{
+					name: 'URL (JSON with Image URL)',
+					value: 'url',
+				},
+			],
+			displayOptions: {
+				show: {
+					resource: ['tweetScreenshot'],
+					operation: ['get'],
+				},
+			},
+		},
+		{
+			displayName: 'Additional Fields',
 				name: 'additionalFields',
 				type: 'collection',
 				placeholder: 'Add Field',
@@ -186,40 +209,64 @@ export class TwitterShots implements INodeType {
 						operation: ['get'],
 					},
 				},
-				options: [
-					{
-						displayName: 'Show Full Text',
-						name: 'showFullText',
-						description: 'Whether to show the full text of the tweet',
-						type: 'boolean',
-						default: true,
-						// ✨ 2. Remove the routing property here
-					},
-					{
-						displayName: 'Show Timestamp',
-						name: 'showTimestamp',
-						description: 'Whether to show the timestamp of the tweet',
-						type: 'boolean',
-						default: true,
-						// ✨ 2. Remove the routing property here
-					},
-					{
-						displayName: 'Show Views',
-						name: 'showViews',
-						description: 'Whether to show the views count of the tweet',
-						type: 'boolean',
-						default: true,
-						// ✨ 2. Remove the routing property here
-					},
-					{
-						displayName: 'Show Stats',
-						name: 'showStats',
-						type: 'boolean',
-						description: 'Whether to show the statistics of the tweet',
-						default: true,
-						// ✨ 2. Remove the routing property here
-					},
-				],
+			options: [
+				{
+					displayName: 'Show Full Text',
+					name: 'showFullText',
+					description: 'Whether to show the full text of the tweet',
+					type: 'boolean',
+					default: true,
+					// ✨ 2. Remove the routing property here
+				},
+				{
+					displayName: 'Show Timestamp',
+					name: 'showTimestamp',
+					description: 'Whether to show the timestamp of the tweet',
+					type: 'boolean',
+					default: true,
+					// ✨ 2. Remove the routing property here
+				},
+				{
+					displayName: 'Show Views',
+					name: 'showViews',
+					description: 'Whether to show the views count of the tweet',
+					type: 'boolean',
+					default: true,
+					// ✨ 2. Remove the routing property here
+				},
+				{
+					displayName: 'Show Stats',
+					name: 'showStats',
+					type: 'boolean',
+					description: 'Whether to show the statistics of the tweet',
+					default: true,
+					// ✨ 2. Remove the routing property here
+				},
+				{
+					displayName: 'Container Background',
+					name: 'containerBackground',
+					type: 'string',
+					description: 'Container background color (hex color code, e.g., #2E3748). Default matches tweet area background color (#ffffff for light theme, #000000 for dark theme)',
+					default: '',
+					placeholder: '#ffffff',
+				},
+				{
+					displayName: 'Container Padding',
+					name: 'containerPadding',
+					type: 'number',
+					description: 'Container padding value in pixels. Default is 16',
+					default: 16,
+					placeholder: '16',
+				},
+				{
+					displayName: 'Border Radius',
+					name: 'borderRadius',
+					type: 'number',
+					description: 'Border radius value in pixels. Default is 16',
+					default: 16,
+					placeholder: '16',
+				},
+			],
 			},
 		],
 	};
@@ -235,19 +282,46 @@ export class TwitterShots implements INodeType {
 				const format = this.getNodeParameter('format', i) as string;
 				const theme = this.getNodeParameter('theme', i) as string;
 				const logo = this.getNodeParameter('logo', i) as string;
+				const returnType = this.getNodeParameter('returnType', i, 'buffer') as string;
 				const additionalFields = this.getNodeParameter('additionalFields', i, {}) as {
 					showFullText?: boolean;
 					showTimestamp?: boolean;
 					showViews?: boolean;
 					showStats?: boolean;
+					containerBackground?: string;
+					containerPadding?: number;
+					borderRadius?: number;
 				};
 
-				const queryParams = {
+				const queryParams: Record<string, any> = {
 					format,
 					theme,
 					logo,
-					...additionalFields,
+					returnType,
 				};
+
+				// Add optional fields only if they are provided
+				if (additionalFields.showFullText !== undefined) {
+					queryParams.showFullText = additionalFields.showFullText;
+				}
+				if (additionalFields.showTimestamp !== undefined) {
+					queryParams.showTimestamp = additionalFields.showTimestamp;
+				}
+				if (additionalFields.showViews !== undefined) {
+					queryParams.showViews = additionalFields.showViews;
+				}
+				if (additionalFields.showStats !== undefined) {
+					queryParams.showStats = additionalFields.showStats;
+				}
+				if (additionalFields.containerBackground) {
+					queryParams.containerBackground = additionalFields.containerBackground;
+				}
+				if (additionalFields.containerPadding !== undefined) {
+					queryParams.containerPadding = additionalFields.containerPadding;
+				}
+				if (additionalFields.borderRadius !== undefined) {
+					queryParams.borderRadius = additionalFields.borderRadius;
+				}
 
 				// ✨ 4. Build an options object conforming to IHttpRequestOptions
 				const options: IHttpRequestOptions = {
@@ -260,7 +334,8 @@ export class TwitterShots implements INodeType {
 							format === 'svg' ? 'image/svg+xml' : format === 'png' ? 'image/png' : format === 'jpeg' ? 'image/jpeg' : 'text/html',
 					},
 					// For binary files, setting encoding to 'arraybuffer' is important
-					encoding: (format === 'html') ? 'text' : 'arraybuffer',
+					// When returnType is 'url', we expect JSON response
+					encoding: (format === 'html' || returnType === 'url') ? 'text' : 'arraybuffer',
 					// We need the full response to access the binary data from the body
 					returnFullResponse: true,
 				};
@@ -274,7 +349,15 @@ export class TwitterShots implements INodeType {
 
 				let executionData: INodeExecutionData;
 
-				if (format === 'html') {
+				// When returnType is 'url', return the JSON response
+				if (returnType === 'url') {
+					executionData = {
+						json: typeof response.body === 'string' ? JSON.parse(response.body) : response.body,
+						pairedItem: {
+							item: i,
+						},
+					};
+				} else if (format === 'html') {
           executionData = {
 						json: {
 							html: response.body,

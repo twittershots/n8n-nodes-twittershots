@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-twittershots",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "n8n node to generate Twitter/X screenshots using TwitterShots API",
   "keywords": [
     "twitter screenshot",
@@ -12,14 +12,14 @@
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/0xinhua/n8n-nodes-twittershots",
+  "homepage": "https://twittershots.com/integrations/n8n",
   "author": {
     "name": "0xinhua",
     "email": "support@twittershots.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/0xinhua/n8n-nodes-twittershots.git"
+    "url": "https://github.com/0xinhua/n8n-nodes-twittershots.git"
   },
   "engines": {
     "node": ">=20.15"
