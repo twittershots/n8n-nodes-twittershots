@@ -209,64 +209,72 @@ export class TwitterShots implements INodeType {
 						operation: ['get'],
 					},
 				},
-		options: [
-			{
-				displayName: 'Border Radius',
-				name: 'borderRadius',
-				type: 'number',
-				description: 'Border radius value in pixels. Default is 16.',
-				default: 16,
-				placeholder: '16',
-			},
-			{
-				displayName: 'Container Background',
-				name: 'containerBackground',
-				type: 'string',
-				description: 'Container background color (hex color code, e.g., #2E3748). Default matches tweet area background color (#ffffff for light theme, #000000 for dark theme).',
-				default: '',
-				placeholder: '#ffffff',
-			},
-			{
-				displayName: 'Container Padding',
-				name: 'containerPadding',
-				type: 'number',
-				description: 'Container padding value in pixels. Default is 16.',
-				default: 16,
-				placeholder: '16',
-			},
-			{
-				displayName: 'Show Full Text',
-				name: 'showFullText',
-				description: 'Whether to show the full text of the tweet',
-				type: 'boolean',
-				default: true,
-				// ✨ 2. Remove the routing property here
-			},
-			{
-				displayName: 'Show Stats',
-				name: 'showStats',
-				type: 'boolean',
-				description: 'Whether to show the statistics of the tweet',
-				default: true,
-				// ✨ 2. Remove the routing property here
-			},
-			{
-				displayName: 'Show Timestamp',
-				name: 'showTimestamp',
-				description: 'Whether to show the timestamp of the tweet',
-				type: 'boolean',
-				default: true,
-				// ✨ 2. Remove the routing property here
-			},
-			{
-				displayName: 'Show Views',
-				name: 'showViews',
-				description: 'Whether to show the views count of the tweet',
-				type: 'boolean',
-				default: true,
-				// ✨ 2. Remove the routing property here
-			},
-		],
+        options: [
+          {
+            displayName: 'Background Image',
+            name: 'backgroundImage',
+            type: 'string',
+            description: 'Background image URL for the screenshot. Use HTTPS URLs for better security and compatibility.',
+            default: '',
+            placeholder: 'https://example.com/image.jpg',
+          },
+          {
+            displayName: 'Border Radius',
+            name: 'borderRadius',
+            type: 'number',
+            description: 'Border radius value in pixels. Default is 16.',
+            default: 16,
+            placeholder: '16',
+          },
+          {
+            displayName: 'Container Background',
+            name: 'containerBackground',
+            type: 'string',
+            description: 'Container background color (hex color code, e.g., #2E3748). Default matches tweet area background color (#ffffff for light theme, #000000 for dark theme).',
+            default: '',
+            placeholder: '#ffffff',
+          },
+          {
+            displayName: 'Container Padding',
+            name: 'containerPadding',
+            type: 'number',
+            description: 'Container padding value in pixels. Default is 16.',
+            default: 16,
+            placeholder: '16',
+          },
+          {
+            displayName: 'Show Full Text',
+            name: 'showFullText',
+            description: 'Whether to show the full text of the tweet',
+            type: 'boolean',
+            default: true,
+            // ✨ 2. Remove the routing property here
+          },
+          {
+            displayName: 'Show Stats',
+            name: 'showStats',
+            type: 'boolean',
+            description: 'Whether to show the statistics of the tweet',
+            default: true,
+            // ✨ 2. Remove the routing property here
+          },
+          {
+            displayName: 'Show Timestamp',
+            name: 'showTimestamp',
+            description: 'Whether to show the timestamp of the tweet',
+            type: 'boolean',
+            default: true,
+            // ✨ 2. Remove the routing property here
+          },
+          {
+            displayName: 'Show Views',
+            name: 'showViews',
+            description: 'Whether to show the views count of the tweet',
+            type: 'boolean',
+            default: true,
+            // ✨ 2. Remove the routing property here
+          },
+        ],
 			},
 		],
 	};
@@ -283,15 +291,16 @@ export class TwitterShots implements INodeType {
 				const theme = this.getNodeParameter('theme', i) as string;
 				const logo = this.getNodeParameter('logo', i) as string;
 				const returnType = this.getNodeParameter('returnType', i, 'buffer') as string;
-				const additionalFields = this.getNodeParameter('additionalFields', i, {}) as {
-					showFullText?: boolean;
-					showTimestamp?: boolean;
-					showViews?: boolean;
-					showStats?: boolean;
-					containerBackground?: string;
-					containerPadding?: number;
-					borderRadius?: number;
-				};
+        const additionalFields = this.getNodeParameter('additionalFields', i, {}) as {
+          backgroundImage?: string;
+          showFullText?: boolean;
+          showTimestamp?: boolean;
+          showViews?: boolean;
+          showStats?: boolean;
+          containerBackground?: string;
+          containerPadding?: number;
+          borderRadius?: number;
+        };
 
 				const queryParams: Record<string, any> = {
 					format,
@@ -300,10 +309,13 @@ export class TwitterShots implements INodeType {
 					returnType,
 				};
 
-				// Add optional fields only if they are provided
-				if (additionalFields.showFullText !== undefined) {
-					queryParams.showFullText = additionalFields.showFullText;
-				}
+        // Add optional fields only if they are provided
+        if (additionalFields.backgroundImage) {
+          queryParams.backgroundImage = additionalFields.backgroundImage;
+        }
+        if (additionalFields.showFullText !== undefined) {
+          queryParams.showFullText = additionalFields.showFullText;
+        }
 				if (additionalFields.showTimestamp !== undefined) {
 					queryParams.showTimestamp = additionalFields.showTimestamp;
 				}

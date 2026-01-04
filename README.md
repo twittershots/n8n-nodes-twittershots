@@ -66,6 +66,8 @@ npm link
 3. Install the node into your local n8n instance:
 
 ```
+~/.n8n/custom/
+
 # In the nodes directory within your n8n installation
 npm link n8n-nodes-twittershots
 ```
